@@ -10,9 +10,10 @@ package com.truphone.demo.controller;
  */
 import com.truphone.demo.model.Device;
 import com.truphone.demo.repository.DeviceRepository;
-import java.sql.Timestamp;
 import java.time.Clock;
 import java.time.Instant;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -33,6 +34,22 @@ public class DeviceController {
     
     @Autowired
     DeviceRepository deviceRepository;
+    
+    @GetMapping("/devices")
+    public ResponseEntity<List<Device>> getAllDevices() {
+        try {
+            List<Device> devices = new ArrayList<>();
+            deviceRepository.findAll().forEach(devices::add);
+
+            if (devices.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(devices, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @PostMapping("/device")
     public ResponseEntity<Device> createDevice(@Valid @RequestBody Device device) {
@@ -46,7 +63,7 @@ public class DeviceController {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
     }
-    
+  
 
     @GetMapping("/device/{id}")
     public ResponseEntity<Device> getDeviceById(@PathVariable("id") long id) {
