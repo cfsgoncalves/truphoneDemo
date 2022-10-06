@@ -11,5 +11,5 @@ CREATE TABLE device(
     id SERIAL PRIMARY KEY,
     name varchar(256),
     brand varchar(256),
-    creation_time timestamp default current_timestamp
+    creation_time timestamp
 );

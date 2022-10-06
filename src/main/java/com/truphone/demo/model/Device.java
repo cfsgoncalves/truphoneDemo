@@ -10,6 +10,7 @@ package com.truphone.demo.model;
  * @author claudiog
  */
 import java.sql.Timestamp;
+import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -17,6 +18,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
+import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "device")
@@ -25,23 +27,35 @@ public class Device {
     private long id;
     @NotEmpty(message = "Brand must not be empty")
     private String brand;
-    private Timestamp creationTime;
+    @NotEmpty(message = "Name must not be empty")
+    private String name;
+    private Instant creationTime;
  
     public Device() {
   
     }
  
-    public Device(String brand) {
+    public Device(String name, String brand, Instant creationTime) {
+         this.name = name;
          this.brand = brand;
+         this.creationTime = creationTime;
     }
  
-    @Id
-    @Column(name = "id")
+    @Id 
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     public long getId() {
         return id;
     }
     public void setId(long id) {
         this.id = id;
+    }
+    
+    @Column(name = "name", nullable = false)
+    public String getName() {
+        return name;
+    }
+    public void setName(String name) {
+        this.name = name;
     }
  
     @Column(name = "brand", nullable = false)
@@ -53,16 +67,16 @@ public class Device {
     }
  
     @Column(name = "creation_time")
-    public Timestamp getCreationTime() {
+    public Instant getCreationTime() {
         return creationTime;
     }
-    public void setCreationTime(Timestamp time) {
+    public void setCreationTime(Instant time) {
         this.creationTime = time;
     }
 
     @Override
     public String toString() {
-        return "Employee [id=" + id + ", brand=" + brand + ", creationTime=" + creationTime + "]";
+        return "Employee [id=" + id + ", name=" + name + ", brand=" + brand + ", creationTime=" + creationTime + "]";
     }
  
 }

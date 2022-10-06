@@ -10,6 +10,9 @@ package com.truphone.demo.controller;
  */
 import com.truphone.demo.model.Device;
 import com.truphone.demo.repository.DeviceRepository;
+import java.sql.Timestamp;
+import java.time.Clock;
+import java.time.Instant;
 
 import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -32,7 +35,10 @@ public class DeviceController {
     @PostMapping("/device")
     public ResponseEntity<Device> createDevice(@Valid @RequestBody Device device) {
 	try {
-            Device deviceResponse = deviceRepository.save(device);
+            Clock cl = Clock.systemUTC(); 
+            Instant lt = Instant.now(cl);
+            
+            Device deviceResponse = deviceRepository.save(new Device(device.getName(), device.getBrand(), lt));
             return new ResponseEntity<>(deviceResponse, HttpStatus.CREATED);
         } catch (Exception e) {
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
