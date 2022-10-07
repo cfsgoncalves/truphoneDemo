@@ -113,6 +113,22 @@ public class DeviceController {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
+    
+    @GetMapping("/device/brand/{brand}")
+    public ResponseEntity<List<Device>> getDevicesByBrand(@PathVariable("brand") String brand) {
+        try {
+            List<Device> devices = new ArrayList<>();
+            deviceRepository.findByBrand(brand).forEach(devices::add);
+
+            if (devices.isEmpty()) {
+                return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            }
+
+            return new ResponseEntity<>(devices, HttpStatus.OK);
+        } catch (Exception e) {
+            return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
 
     @GetMapping("/device")
     public ResponseEntity<String> findByPublished() {
