@@ -9,7 +9,6 @@ package com.truphone.demo.model;
  *
  * @author claudiog
  */
-import java.sql.Timestamp;
 import java.time.Instant;
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -18,16 +17,15 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.validation.constraints.NotEmpty;
-import org.springframework.data.annotation.CreatedDate;
 
 @Entity
 @Table(name = "device")
 public class Device {
 
     private long id;
-    @NotEmpty(message = "Brand must not be empty")
+    // @NotEmpty(message = "Brand must not be empty")
     private String brand;
-    @NotEmpty(message = "Name must not be empty")
+    // @NotEmpty(message = "Name must not be empty")
     private String name;
     private Instant creationTime;
  
@@ -50,7 +48,7 @@ public class Device {
         this.id = id;
     }
     
-    @Column(name = "name", nullable = false)
+    @Column(name = "name", nullable=false)
     public String getName() {
         return name;
     }
@@ -58,7 +56,7 @@ public class Device {
         this.name = name;
     }
  
-    @Column(name = "brand", nullable = false)
+    @Column(name = "brand", nullable=false)
     public String getBrand() {
         return brand;
     }

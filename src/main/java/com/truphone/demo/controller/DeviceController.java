@@ -14,6 +14,7 @@ import java.time.Clock;
 import java.time.Instant;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -64,6 +66,26 @@ public class DeviceController {
 	}
     }
   
+    @PutMapping("/device/{id}")
+    public ResponseEntity<Device> updateDevice(@PathVariable("id") long id, @RequestBody Device newDevice) {
+        Optional<Device> deviceData = deviceRepository.findById(id);
+
+        if (deviceData.isPresent()) {
+            Device oldDevice = deviceData.get();
+            
+            if(!Objects.isNull(newDevice.getName())){
+                oldDevice.setName(newDevice.getName());
+            }
+            
+            if(!Objects.isNull(newDevice.getBrand())){
+                oldDevice.setBrand(newDevice.getBrand());
+            }
+            
+            return new ResponseEntity<>(deviceRepository.save(oldDevice), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
 
     @GetMapping("/device/{id}")
     public ResponseEntity<Device> getDeviceById(@PathVariable("id") long id) {
@@ -75,7 +97,6 @@ public class DeviceController {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
 
     @GetMapping("/device")
     public ResponseEntity<String> findByPublished() {
