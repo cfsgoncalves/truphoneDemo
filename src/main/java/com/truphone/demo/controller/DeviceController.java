@@ -18,6 +18,8 @@ import java.util.Objects;
 import java.util.Optional;
 
 import javax.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -35,12 +37,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api/v1")
 public class DeviceController {
     
+    Logger logger = LoggerFactory.getLogger(DeviceController.class);    
+    
     @Autowired
     DeviceRepository deviceRepository;
     
     @GetMapping("/devices")
     public ResponseEntity<List<Device>> getAllDevices() {
-        try {
+        try {            
             List<Device> devices = new ArrayList<>();
             deviceRepository.findAll().forEach(devices::add);
 
@@ -48,8 +52,10 @@ public class DeviceController {
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
+            logger.info("All devices returned with sucess");
             return new ResponseEntity<>(devices, HttpStatus.OK);
         } catch (Exception e) {
+            logger.error("Internal server error while executing getAllDevices()");
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -57,12 +63,16 @@ public class DeviceController {
     @PostMapping("/device")
     public ResponseEntity<Device> createDevice(@Valid @RequestBody Device device) {
 	try {
-            Clock cl = Clock.systemUTC(); 
-            Instant lt = Instant.now(cl);
+            Clock clock = Clock.systemUTC(); 
+            Instant instant = Instant.now(clock);
             
-            Device deviceResponse = deviceRepository.save(new Device(device.getName(), device.getBrand(), lt));
+            Device newDevice = new Device(device.getName(), device.getBrand(), instant);
+            Device deviceResponse = deviceRepository.save(newDevice);
+                        
+            logger.info("Device created with sucess: " + newDevice.toString());
             return new ResponseEntity<>(deviceResponse, HttpStatus.CREATED);
         } catch (Exception e) {
+            logger.error("Internal server error while creating a device");
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
     }
@@ -82,8 +92,10 @@ public class DeviceController {
                 oldDevice.setBrand(newDevice.getBrand());
             }
             
+            logger.info("Device was updated sucessfully: " + oldDevice.toString());
             return new ResponseEntity<>(deviceRepository.save(oldDevice), HttpStatus.OK);
         } else {
+            logger.warn("Device that you are trying to update was not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -93,8 +105,10 @@ public class DeviceController {
         Optional<Device> deviceData = deviceRepository.findById(id);
 
         if (deviceData.isPresent()) {
+            logger.warn("Device was fetched sucessfully: " + deviceData.toString());
             return new ResponseEntity<>(deviceData.get(), HttpStatus.OK);
         } else {
+            logger.warn("Device that you are trying to fetch was not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
@@ -105,11 +119,14 @@ public class DeviceController {
             Optional<Device> deviceData = deviceRepository.findById(id);
             if (deviceData.isPresent()) {
                 deviceRepository.deleteById(id);
+                logger.info("Device was deleted sucessfully: " + deviceData.toString());
                 return new ResponseEntity<>(HttpStatus.OK);
             } else {
+                logger.warn("Device was not found");
                 return new ResponseEntity<>(HttpStatus.NOT_FOUND);
             }
         } catch (Exception e) {
+            logger.error("Internal server error while deleting a device");
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -121,18 +138,16 @@ public class DeviceController {
             deviceRepository.findByBrand(brand).forEach(devices::add);
 
             if (devices.isEmpty()) {
+                logger.warn("Devices were not found for the brand " + brand);
                 return new ResponseEntity<>(HttpStatus.NO_CONTENT);
             }
 
+            logger.info("Devices by brand were found: " + devices.toString());
             return new ResponseEntity<>(devices, HttpStatus.OK);
         } catch (Exception e) {
+            logger.error("Internal server error while searching a devices by a brand");
             return new ResponseEntity<>(null, HttpStatus.INTERNAL_SERVER_ERROR);
         }
-    }
-
-    @GetMapping("/device")
-    public ResponseEntity<String> findByPublished() {
-        return new ResponseEntity<>("Hello", HttpStatus.ACCEPTED);
     }
 
 }
