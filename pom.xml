@@ -83,25 +83,46 @@
                 <artifactId>flyway-maven-plugin</artifactId>
                 <executions>
                     <execution>
+                        <id> DB1</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>migrate</goal>
                         </goals>
+                        <configuration>
+                            <driver>org.postgresql.Driver</driver>
+                            <url>jdbc:postgresql://localhost:5432/postgres</url>
+                            <user>postgres</user>
+                            <password>postgres</password>
+                            <baselineOnMigrate>true</baselineOnMigrate>
+                            <schemas>public</schemas>
+                            <locations>
+                                <location>
+                                    filesystem:src/main/resources/db/migrations
+                                </location>
+                            </locations>
+                        </configuration>
+                    </execution>
+                    <execution>
+                        <id> DB2 </id>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>migrate</goal>
+                        </goals>
+                        <configuration>
+                            <driver>org.postgresql.Driver</driver>
+                            <url>jdbc:postgresql://localhost:5430/postgres</url>
+                            <user>postgres</user>
+                            <password>postgres</password>
+                            <baselineOnMigrate>true</baselineOnMigrate>
+                            <schemas>public</schemas>
+                            <locations>
+                                <location>
+                                    filesystem:src/main/resources/db/migrations
+                                </location>
+                            </locations>
+                        </configuration>
                     </execution>
                 </executions>
-                <configuration>
-                    <driver>org.postgresql.Driver</driver>
-                    <url>jdbc:postgresql://localhost:5432/postgres</url>
-                    <user>postgres</user>
-                    <password>postgres</password>
-                    <baselineOnMigrate>true</baselineOnMigrate>
-                    <schemas>public</schemas>
-                    <locations>
-                        <location>
-                            filesystem:src/main/resources/db/migrations
-                        </location>
-                    </locations>
-                </configuration>
             </plugin>
             
         </plugins>
