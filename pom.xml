@@ -72,10 +72,16 @@
     </dependencies>
 
     <build>
+        <finalName>Truphone-demo</finalName>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+                <configuration>
+                    <layers>
+                        <enabled>true</enabled>
+                    </layers>
+                </configuration>
             </plugin>
             
             <plugin>
@@ -90,7 +96,7 @@
                         </goals>
                         <configuration>
                             <driver>org.postgresql.Driver</driver>
-                            <url>jdbc:postgresql://localhost:5432/postgres</url>
+                            <url>jdbc:postgresql://192.168.1.67:5432/postgres</url>
                             <user>postgres</user>
                             <password>postgres</password>
                             <baselineOnMigrate>true</baselineOnMigrate>
@@ -110,7 +116,7 @@
                         </goals>
                         <configuration>
                             <driver>org.postgresql.Driver</driver>
-                            <url>jdbc:postgresql://localhost:5430/postgres</url>
+                            <url>jdbc:postgresql://192.168.1.67:5430/postgres</url>
                             <user>postgres</user>
                             <password>postgres</password>
                             <baselineOnMigrate>true</baselineOnMigrate>
