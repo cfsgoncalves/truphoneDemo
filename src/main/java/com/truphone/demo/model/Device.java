@@ -10,6 +10,7 @@ package com.truphone.demo.model;
  * @author claudiog
  */
 import java.time.Instant;
+import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -71,7 +72,7 @@ public class Device {
     public void setCreationTime(Instant time) {
         this.creationTime = time;
     }
-
+    
     @Override
     public String toString() {
         return "Employee [id=" + id + ", name=" + name + ", brand=" + brand + ", creationTime=" + creationTime + "]";
