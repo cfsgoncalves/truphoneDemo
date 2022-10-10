@@ -10,14 +10,12 @@ package com.truphone.demo.model;
  * @author claudiog
  */
 import java.time.Instant;
-import java.util.Objects;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.validation.constraints.NotEmpty;
 
 @Entity
 @Table(name = "device")
@@ -39,7 +37,7 @@ public class Device {
          this.brand = brand;
          this.creationTime = creationTime;
     }
- 
+
     @Id 
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     public long getId() {

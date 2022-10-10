@@ -25,6 +25,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 
 import org.springframework.web.bind.annotation.PostMapping;
@@ -82,6 +83,22 @@ public class DeviceController {
         Optional<Device> deviceData = deviceRepository.findById(id);
 
         if (deviceData.isPresent()) {
+            newDevice.setId(id);
+            newDevice.setCreationTime(deviceData.get().getCreationTime());
+            Device deviceSaved = deviceRepository.save(newDevice);
+            logger.info("Device was substituted sucessfully: " + newDevice.toString());
+            return new ResponseEntity<>(deviceSaved, HttpStatus.OK);
+        } else {
+            logger.warn("Device that you are trying to update was not found");
+            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+        }
+    }
+    
+    @PatchMapping("/device/{id}")
+    public ResponseEntity<Device> updateDevicePartiunally(@PathVariable("id") long id, @RequestBody Device newDevice) {
+        Optional<Device> deviceData = deviceRepository.findById(id);
+
+        if (deviceData.isPresent()) {
             Device oldDevice = deviceData.get();
             
             if(!Objects.isNull(newDevice.getName())){
@@ -92,8 +109,9 @@ public class DeviceController {
                 oldDevice.setBrand(newDevice.getBrand());
             }
             
-            logger.info("Device was updated sucessfully: " + oldDevice.toString());
-            return new ResponseEntity<>(deviceRepository.save(oldDevice), HttpStatus.OK);
+            Device deviceSaved = deviceRepository.save(oldDevice);
+            logger.info("Device was partially updated sucessfully: " + oldDevice.toString());
+            return new ResponseEntity<>(deviceSaved, HttpStatus.OK);
         } else {
             logger.warn("Device that you are trying to update was not found");
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
