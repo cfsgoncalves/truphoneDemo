@@ -95,7 +95,7 @@ public class DeviceController {
     }
     
     @PatchMapping("/device/{id}")
-    public ResponseEntity<Device> updateDevicePartiunally(@PathVariable("id") long id, @RequestBody Device newDevice) {
+    public ResponseEntity<Device> updateDevicePartially(@PathVariable("id") long id, @RequestBody Device newDevice) {
         Optional<Device> deviceData = deviceRepository.findById(id);
 
         if (deviceData.isPresent()) {
