@@ -24,15 +24,17 @@ Challenge project for Truphone company
 - [x] PATCH Request to partially update the devices
 - [x] DELETE Request to delete a device from the db
 - [x] Get Request to search device by brand
-- [ ] Input validation
-- [ ] Add OAuth2
 
 ## Support features
 - [x] Unit testing (some)
 - [x] Integration Testing (some)
-- [ ] End-to-end testing
 - [x] Test Database separate from production database
 - [x] Usage of migration service to support parallel development
 - [x] Dockerize applications and databases (docker-compose)
-- [ ] Run tests on the CI
 
+## Next Steps
+- [ ] Input validation
+- [ ] Add some kind of authorization to acess Web Service
+- [ ] Complete tests (unit and integration)
+- [ ] Run tests on CI
+- [ ] End-to-end testing
